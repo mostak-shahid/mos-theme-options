@@ -48,13 +48,15 @@ class Options_Panel {
         $this->menu_position     = $this->args['menu_position'] ?? null;
         $this->icon_url          = $this->args['icon_url'] ?? 'dashicons-admin-generic';
         $this->parent_slug       = $this->args['parent_slug'] ?? '';
-        $this->slug              = $this->args['slug'] ?? sanitize_key( $this->title );
-        $this->option_name       = $this->args['option_name'] ?? sanitize_key( $this->title );
+        $this->slug              = $this->args['slug'] ?? sanitize_key( $this->menu_title );
+        $this->option_name       = $this->args['option_name'] ?? sanitize_key( $this->menu_title );
         $this->option_group_name = $this->option_name . '_group';
         $this->user_capability   = $args['user_capability'] ?? 'manage_options';
 
         add_action( 'admin_menu', [ $this, 'register_menu_page' ] );
         add_action( 'admin_init', [ $this, 'register_settings' ] );
+
+        update_option( 'mos-theme-option-css-output-name', $this->option_name.'-css-output' );
     }
 
     /**
@@ -411,6 +413,8 @@ class Options_Panel {
         $description = $this->settings[$option_name]['description'] ?? '';
         $default     = $this->settings[$option_name]['default'] ?? '';
         $value       = ($value)?$value:$default;
+        $output     = $this->settings[$option_name]['output'] ?? '';
+        $mode     = $this->settings[$option_name]['mode'] ?? '';
         ?>
             <input
                 type="color"
@@ -419,7 +423,18 @@ class Options_Panel {
                 value="<?php echo esc_attr( $value ); ?>">
             <?php if ( $description ) { ?>
                 <p class="description"><?php echo esc_html( $description ); ?></p>
-            <?php } ?>
+            <?php } ?>            
+            <?php   
+            if ( $output ) { 
+                $data = get_option($this->option_name.'-css-output');
+                if(@$data && is_array($data))
+                    $data = array_merge($data,[$args['label_for'] => [$output=> ['data' => $value, 'mood' => $mode, 'type'=>'color']]]);
+                else 
+                    $data = [$args['label_for'] => [$output=> ['data' => $value, 'mood' => $mode, 'type'=>'color']]];
+                //$save_data = [$old_data, $output => [$args['label_for']=> ['data' => $values, 'mood' => $mode, 'type'=>'spacing']]];
+                update_option( $this->option_name.'-css-output', $data );
+            }
+            ?>
         <?php
     }
 
@@ -433,7 +448,7 @@ class Options_Panel {
         $defaults     = $this->settings[$option_name]['defaults'] ?? '';
         $values       = ($values)?$values:$defaults;
         $options     = ($this->settings[$option_name]['options']) ? $this->settings[$option_name]['options']:['base'];
-        //var_dump($values);
+        $output     = $this->settings[$option_name]['output'] ?? '';
         ?>
             <div class="group-wrap">
                 <div class="group-unit">
@@ -468,6 +483,17 @@ class Options_Panel {
             <?php if ( $description ) { ?>
                 <p class="description"><?php echo esc_html( $description ); ?></p>
             <?php } ?>
+            <?php   
+            if ( $output ) { 
+                $data = get_option($this->option_name.'-css-output');
+                if(@$data && is_array($data))
+                    $data = array_merge($data,[$args['label_for'] => [$output=> ['data' => $values, 'mood' => '', 'type'=>'link_color']]]);
+                else 
+                    $data = [$args['label_for'] => [$output=> ['data' => $values, 'mood' => '', 'type'=>'link_color']]];
+                //$save_data = [$old_data, $output => [$args['label_for']=> ['data' => $values, 'mood' => $mode, 'type'=>'spacing']]];
+                update_option( $this->option_name.'-css-output', $data );
+            }
+            ?>
         <?php
     }
 
@@ -480,8 +506,8 @@ class Options_Panel {
         $description = $this->settings[$option_name]['description'] ?? '';
         $defaults     = $this->settings[$option_name]['defaults'] ?? '';
         $values       = ($values)?$values:$defaults;
-        //$options     = ($this->settings[$option_name]['options']) ? $this->settings[$option_name]['options']:['base'];
-        //var_dump($values);
+        $output     = $this->settings[$option_name]['output'] ?? '';
+        $mode     = $this->settings[$option_name]['mode'] ?? '';
         ?>
             <div class="group-wrap">
                 <div class="group-unit">
@@ -525,6 +551,17 @@ class Options_Panel {
             <?php if ( $description ) { ?>
                 <p class="description"><?php echo esc_html( $description ); ?></p>
             <?php } ?>
+            <?php   
+            if ( $output ) { 
+                $data = get_option($this->option_name.'-css-output');
+                if(@$data && is_array($data))
+                    $data = array_merge($data,[$args['label_for'] => [$output=> ['data' => $values, 'mood' => $mode, 'type'=>'gradient_color']]]);
+                else 
+                    $data = [$args['label_for'] => [$output=> ['data' => $values, 'mood' => $mode, 'type'=>'gradient_color']]];
+                //$save_data = [$old_data, $output => [$args['label_for']=> ['data' => $values, 'mood' => $mode, 'type'=>'spacing']]];
+                update_option( $this->option_name.'-css-output', $data );
+            }
+            ?>
         <?php
     }
 
@@ -650,6 +687,8 @@ class Options_Panel {
         $defaults     = $this->settings[$option_name]['defaults'] ?? '';
         $values       = ($values)?$values:$defaults;
         $options     = ($this->settings[$option_name]['options']) ? $this->settings[$option_name]['options']:['top', 'right', 'bottom', 'left'];
+        $output     = $this->settings[$option_name]['output'] ?? '';
+        $mode     = $this->settings[$option_name]['mode'] ?? '';
         ?>
             <div class="group-wrap">
                 <?php if (in_array("top", $options)) : ?>
@@ -696,6 +735,18 @@ class Options_Panel {
             <?php if ( $description ) { ?>
                 <p class="description"><?php echo esc_html( $description ); ?></p>
             <?php } ?>
+            <?php   
+            if ( $output ) { 
+                $data = get_option($this->option_name.'-css-output');
+                if(@$data && is_array($data))
+                    $data = array_merge($data,[$args['label_for'] => [$output=> ['data' => $values, 'mood' => $mode, 'type'=>'spacing']]]);
+                else 
+                    $data = [$args['label_for'] => [$output=> ['data' => $values, 'mood' => $mode, 'type'=>'spacing']]];
+                //$save_data = [$old_data, $output => [$args['label_for']=> ['data' => $values, 'mood' => $mode, 'type'=>'spacing']]];
+                update_option( $this->option_name.'-css-output', $data );
+            }
+            ?>
+
         <?php
     }
 
@@ -709,6 +760,8 @@ class Options_Panel {
         $defaults     = $this->settings[$option_name]['defaults'] ?? '';
         $values       = ($values)?$values:$defaults;
         $options     = ($this->settings[$option_name]['options']) ? $this->settings[$option_name]['options']:['top', 'right', 'bottom', 'left'];
+        $output     = $this->settings[$option_name]['output'] ?? '';
+        $mode     = $this->settings[$option_name]['mode'] ?? '';
         ?>
             <div class="group-wrap">
                 <?php if (in_array("top", $options)) : ?>
@@ -785,6 +838,17 @@ class Options_Panel {
             <?php if ( $description ) { ?>
                 <p class="description"><?php echo esc_html( $description ); ?></p>
             <?php } ?>
+            <?php   
+            if ( $output ) { 
+                $data = get_option($this->option_name.'-css-output');
+                if(@$data && is_array($data))
+                    $data = array_merge($data,[$args['label_for'] => [$output=> ['data' => $values, 'mood' => $mode, 'type'=>'border']]]);
+                else 
+                    $data = [$args['label_for'] => [$output=> ['data' => $values, 'mood' => $mode, 'type'=>'border']]];
+                //$save_data = [$old_data, $output => [$args['label_for']=> ['data' => $values, 'mood' => $mode, 'type'=>'spacing']]];
+                update_option( $this->option_name.'-css-output', $data );
+            }
+            ?>
         <?php
     }
 
@@ -798,6 +862,8 @@ class Options_Panel {
         $defaults     = $this->settings[$option_name]['defaults'] ?? '';
         $values       = ($values)?$values:$defaults;
         $options     = ($this->settings[$option_name]['options']) ? $this->settings[$option_name]['options']:['width', 'height'];
+        $output     = $this->settings[$option_name]['output'] ?? '';
+        $mode     = $this->settings[$option_name]['mode'] ?? '';
         ?>
             <div class="group-wrap">
                 <?php if (in_array("width", $options)) : ?>
@@ -824,6 +890,17 @@ class Options_Panel {
             <?php if ( $description ) { ?>
                 <p class="description"><?php echo esc_html( $description ); ?></p>
             <?php } ?>
+            <?php   
+            if ( $output ) { 
+                $data = get_option($this->option_name.'-css-output');
+                if(@$data && is_array($data))
+                    $data = array_merge($data,[$args['label_for'] => [$output=> ['data' => $values, 'mood' => $mode, 'type'=>'dimensions']]]);
+                else 
+                    $data = [$args['label_for'] => [$output=> ['data' => $values, 'mood' => $mode, 'type'=>'dimensions']]];
+                //$save_data = [$old_data, $output => [$args['label_for']=> ['data' => $values, 'mood' => $mode, 'type'=>'spacing']]];
+                update_option( $this->option_name.'-css-output', $data );
+            }
+            ?>
         <?php
     }
 
@@ -837,6 +914,8 @@ class Options_Panel {
         $defaults     = $this->settings[$option_name]['defaults'] ?? '';
         $values       = ($values)?$values:$defaults;
         $options     = ($this->settings[$option_name]['options']) ? $this->settings[$option_name]['options']:['color', 'repeat', 'size', 'attachment', 'position', 'image'];
+        $output     = $this->settings[$option_name]['output'] ?? '';
+        $mode     = $this->settings[$option_name]['mode'] ?? '';
         ?>
             <div class="group-wrap">
                 <?php if (in_array("color", $options)) : ?>
@@ -943,6 +1022,17 @@ class Options_Panel {
             <?php if ( $description ) { ?>
                 <p class="description"><?php echo esc_html( $description ); ?></p>
             <?php } ?>
+            <?php   
+            if ( $output ) { 
+                $data = get_option($this->option_name.'-css-output');
+                if(@$data && is_array($data))
+                    $data = array_merge($data,[$args['label_for'] => [$output=> ['data' => $values, 'mood' => $mode, 'type'=>'background']]]);
+                else 
+                    $data = [$args['label_for'] => [$output=> ['data' => $values, 'mood' => $mode, 'type'=>'background']]];
+                //$save_data = [$old_data, $output => [$args['label_for']=> ['data' => $values, 'mood' => $mode, 'type'=>'spacing']]];
+                update_option( $this->option_name.'-css-output', $data );
+            }
+            ?>
         <?php
     }
 
@@ -957,6 +1047,7 @@ class Options_Panel {
         $values       = ($values)?$values:$defaults;
         $options     = ($this->settings[$option_name]['options']) ? $this->settings[$option_name]['options']:['family', 'weight', 'alignment', 'size', 'height', 'color'];
         $output      = $this->settings[$option_name]['output'] ?? '';
+        $mode      = $this->settings[$option_name]['mode'] ?? '';
         ?>
             <div class="group-wrap">
                 <?php if (in_array("family", $options)) : ?>
@@ -1040,7 +1131,17 @@ class Options_Panel {
             <?php if ( $description ) { ?>
                 <p class="description"><?php echo esc_html( $description ); ?></p>
             <?php } ?>
-            <?php if ( $output ) {  update_option( $this->option_name.'-css-output', [$output => [$args['label_for'] => $values]] );}?>
+            <?php            
+            if ( $output ) { 
+                $data = get_option($this->option_name.'-css-output');
+                if(@$data && is_array($data))
+                    $data = array_merge($data,[$args['label_for'] => [$output=> ['data' => $values, 'mood' => $mode, 'type'=>'typography']]]);
+                else 
+                    $data = [$args['label_for'] => [$output=> ['data' => $values, 'mood' => $mode, 'type'=>'typography']]];
+                //$save_data = [$old_data, $output => [$args['label_for']=> ['data' => $values, 'mood' => $mode, 'type'=>'spacing']]];
+                update_option( $this->option_name.'-css-output', $data );
+            }
+            ?>
 
         <?php
     }

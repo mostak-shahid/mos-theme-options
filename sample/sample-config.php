@@ -5,19 +5,16 @@ $panel_args = [
     'menu_position'   => 91,
 	//'parent_slug'	  => 'edit.php?post_type=qa',
     'icon_url'        => 'dashicons-admin-generic',
-    'option_name'     => 'mos_theme_option_settings',
+    'option_name'     => 'mos-theme-option-settings',
     'slug'            => 'mos_theme_option_settings',
     'user_capability' => 'manage_options',
     'tabs'            => [
-        'basic' => esc_html__( 'Basic', 'text_domain' ),
-        'ordering' => esc_html__( 'Ordering', 'text_domain' ),
-        'styling' => esc_html__( 'Styling', 'text_domain' ),
-        'advanced' => esc_html__( 'Advanced', 'text_domain' ),
 		'basic-fields' =>  esc_html__( 'Basic Fields', 'text_domain' ),
 		'color' =>  esc_html__( 'Color', 'text_domain' ),
 		'design-fields' =>  esc_html__( 'Design Fields', 'text_domain' ),
 		'media-uploads' =>  esc_html__( 'Media Uploads', 'text_domain' ),
 		'typography' =>  esc_html__( 'Typography', 'text_domain' ),
+        'advanced' => esc_html__( 'Advanced', 'text_domain' ),
     ],
     'subtabs' => [
         'basic'=> ['basic-functionality' => esc_html__( 'Functionality', 'text_domain' ),'basic-display' =>esc_html__( 'Display', 'text_domain' )],   
@@ -188,7 +185,9 @@ $panel_settings = [
 	// Styling
 	'body-background-color-primary' => [
         'label'       => esc_html__( 'Primary Background Color', 'text_domain' ),
-        'type'        => 'color',
+        'type'        => 'color',        
+        'output'      => '.yyy',
+        'mode'        => 'background',
         'tab'         => 'color',
     ],
 	'body-link-color' => [
@@ -199,7 +198,8 @@ $panel_settings = [
 			'base'    => '#ff00ff',
 			'hover'   => '#ffffff',
 			'active'  => '#ff0000'
-		],
+		], 
+        'output'      => '.yyy',
         'tab'         => 'color',
     ],
 	'body-gradient-color' => [
@@ -210,7 +210,9 @@ $panel_settings = [
 			'end'     => '#000000',
 			'type'	  => 'linear',
 			'angle'   => '153'
-		],
+		], 
+        'output'      => '.yyy',
+        'mode'        => 'color',
         'tab'         => 'color',
     ],
 	'body-background-dimensions' => [
@@ -220,6 +222,7 @@ $panel_settings = [
 		'defaults'    => [
 			'width'    => '100%'
 		],
+        'output'      => '.blog-title',
         'tab'         => 'design-fields',
     ],
 	'body-background-spacing' => [
@@ -234,6 +237,34 @@ $panel_settings = [
 		],
         'tab'         => 'design-fields',
     ],
+	'body-background-padding' => [
+        'label'       => esc_html__( 'Paddig xxx', 'text_domain' ),
+        'type'        => 'spacing',
+		'options'     => ['top', 'right', 'bottom', 'left'],
+		'defaults'    => [
+			'top'     => '10px',
+			'right'   => '20px',
+			'bottom'  => '30px',
+			'left'	  => '10px'
+		],
+        'output'      => '.blog-title',
+        'mode'        => 'padding',
+        'tab'         => 'design-fields',
+    ],
+	'body-background-margin' => [
+        'label'       => esc_html__( 'Margin yyy', 'text_domain' ),
+        'type'        => 'spacing',
+		'options'     => ['top', 'right', 'bottom', 'left'],
+		'defaults'    => [
+			'top'     => '10px',
+			'right'   => '20px',
+			'bottom'  => '30px',
+			'left'	  => '10px'
+		],
+        'output'      => '.blog-title',
+        'mode'        => 'margin',
+        'tab'         => 'design-fields',
+    ],
 	'body-background-border' => [
         'label'       => esc_html__( 'Border Option', 'text_domain' ),
         'type'        => 'border',
@@ -246,6 +277,7 @@ $panel_settings = [
 			'style'   => 'solid',
 			'color'   => '#000000'
 		],
+        'output'      => '.blog-title',
         'tab'         => 'design-fields',
     ],
     'body-background' => [
@@ -261,6 +293,7 @@ $panel_settings = [
 			'position'   => 'center center',
 			'image'   => ''
 		],
+        'output'      => '.blog-title',
         'tab'         => 'design-fields',
     ],
     'body-font-size' => [
@@ -276,7 +309,7 @@ $panel_settings = [
 			'height'   => '1.2',
 			'color'   => '#000000'
 		],
-        'output'      => '.xxx',
+        'output'      => '.blog-title',
         'tab'         => 'typography',
     ],
 	// Styling

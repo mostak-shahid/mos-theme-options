@@ -107,7 +107,124 @@ function mos_theme_options_hook_css() {
 }
 add_action('wp_head', 'mos_theme_options_hook_css');
 
-function my_callback(){
-    echo 'test';
+function mos_theme_options_generate_css_callback(){
+    //echo 'test';
+	$optionname = get_option('mos-theme-option-css-output-name');
+	if (@$optionname) {
+		$data = get_option($optionname);
+		if (@$data && is_array($data)) {
+			foreach($data as $key => $value) {
+				foreach($value as $selector => $val ) {					
+						//echo $val["type"];
+						if ($val["type"] == "spacing") {
+							echo $selector.'{';
+							foreach($val["data"] as $attr => $property) {
+								if ($property) echo $val["mood"].'-'.$attr.':'.$property.';';
+							}
+							echo '}';
+						} 
+						if ($val["type"] == "typography") {
+							echo $selector.'{';
+							foreach($val["data"] as $attr => $property) {
+								if ($property) {
+									if ($attr == 'family') echo 'font-family: ' . $property .';';
+									if ($attr == 'weight') echo 'font-weight: ' . $property .';';
+									if ($attr == 'alignment') echo 'text-align: ' . $property .';';
+									if ($attr == 'size') echo 'font-size: ' . $property .';';
+									if ($attr == 'height') echo 'line-height: ' . $property .';';
+									if ($attr == 'color') echo 'color: ' . $property .';';
+								}
+							}
+							echo '}';
+						}
+						if ($val["type"] == "border") {
+							echo $selector.'{';
+							//var_dump($val["data"]);
+							foreach($val["data"] as $attr => $property) {
+								if ($property) {
+									if ($attr == 'style') echo 'border-style: ' . $property .';';
+									elseif ($attr == 'color') echo 'border-color: ' . $property .';';
+									else echo 'border-'.$attr.': ' . $property .';';
+								}
+							}
+							echo '}';
+						} 
+						if ($val["type"] == "dimensions") {
+							echo $selector.'{';
+							//var_dump($val["data"]);
+							foreach($val["data"] as $attr => $property) {
+								if ($property) echo $attr.':'.$property.';';
+							}
+							echo '}';
+						} 
+						if ($val["type"] == "background") {
+							echo $selector.'{';
+							//var_dump($val["data"]);
+							foreach($val["data"] as $attr => $property) {
+								if ($property) {
+									if ($attr == 'image') echo 'background-'.$attr.': url(' . $property .');';
+									else echo 'background-'.$attr.': ' . $property .';';
+								};
+							}
+							echo '}';
+						} 
+						if ($val["type"] == "color") {
+							echo $selector.'{';
+							//var_dump($val["data"]);
+							if ($property) echo $val["mood"].':'.$property.';';
+							/*foreach($val["data"] as $attr => $property) {
+								if ($property) {
+									if ($attr == 'image') echo 'background-'.$attr.': url(' . $property .');';
+									else echo 'background-'.$attr.': ' . $property .';';
+								};
+							}*/
+							echo '}';
+						} 
+						if ($val["type"] == "link_color") {
+							
+							if(@$val["data"]["base"]) {
+								echo $selector.'{';
+								echo 'color:' . $val["data"]["base"].';';
+								echo '}';
+							}
+							if(@$val["data"]["hover"]) {
+								echo $selector.':hover{';
+								echo 'color:' . $val["data"]["hover"].';';
+								echo '}';
+							}
+							if(@$val["data"]["active"]) {
+								echo $selector.':active{';
+								echo 'color:' . $val["data"]["active"].';';
+								echo '}';
+							}
+							/*foreach($val["data"] as $attr => $property) {
+								if ($property) {
+									if ($attr == 'image') echo 'background-'.$attr.': url(' . $property .');';
+									else echo 'background-'.$attr.': ' . $property .';';
+								};
+							}*/
+							
+						} 
+						if ($val["type"] == "gradient_color") {
+							echo $selector.'{';
+							//var_dump($val["data"]);
+							if ($val["data"]["type"] == 'linear') {
+								echo 'background: linear-gradient('.$val["data"]["angle"].'deg, '.$val["data"]["start"].' 0%, '.$val["data"]["end"].' 100%);';
+							} else {
+								echo 'background: radial-gradient(circle, '.$val["data"]["start"].' 0%, '.$val["data"]["end"].' 100%);';
+							}
+							if ($val["mood"] == 'color') {
+								echo '
+									-webkit-background-clip: text;
+									-webkit-text-fill-color: transparent;';
+							}
+							echo '}';
+						} 
+						//var_dump($val);
+				}
+			}
+		}
+		//print_r(get_option($optionname));
+	}
 }
-add_action( 'mos_theme_options_generate_css', 'my_callback' );
+add_action( 'mos_theme_options_generate_css', 'mos_theme_options_generate_css_callback' );
