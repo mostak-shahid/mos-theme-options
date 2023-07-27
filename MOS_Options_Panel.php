@@ -298,7 +298,7 @@ class Options_Panel {
     /**
      * Returns an option value.
      */
-    protected function get_option_value( $option_name ) {
+    public function get_option_value( $option_name ) {
         $option = get_option( $this->option_name );
         if ( ! array_key_exists( $option_name, $option ) ) {
             return array_key_exists( 'default', $this->settings[$option_name] ) ? $this->settings[$option_name]['default'] : '';

@@ -463,4 +463,6 @@ $panel_settings = [
         'tab'         => 'media-uploads',
     ],
 ];
-new Mos_Theme_Options\Options_Panel( $panel_args, $panel_settings );
+$theme_option = new Mos_Theme_Options\Options_Panel( $panel_args, $panel_settings );
+
+//var_dump($theme_option->get_option_value( 'body-background' ));
